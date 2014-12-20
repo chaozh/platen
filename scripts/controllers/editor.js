@@ -22,6 +22,7 @@ var EditorController = function(Post, $scope, $routeParams, $filter, fileManager
   $scope.deleteImageConfirmOpen = false;
   $scope.tags = [];
   $scope.categories = [];
+  $scope.editor = null;
 
   var notifyOnCompletion = function(message, error, isSuccess) {
     if (error) {
@@ -64,6 +65,17 @@ var EditorController = function(Post, $scope, $routeParams, $filter, fileManager
     $scope.showMetadata = false;
     $scope.previewMessage = MESSAGE_PREVIEW_HTML;
 
+    /*$scope.editor = new Pen({
+      editor: $('#post-content')[0] ,
+      debug: true
+    });*/
+
+    /*$scope.editor = CodeMirror.fromTextArea( $('#markdown-editor')[0], {
+      mode: 'markdown',
+      tabMode: 'indent',
+      lineWrapping: true
+    });*/
+
     logger.log("loaded post '" + $scope.post.title + "'", "EditorController");
 
     $scope.safeApply();
@@ -85,9 +97,14 @@ var EditorController = function(Post, $scope, $routeParams, $filter, fileManager
     });
   };
 
+  var highlight = function() {
+
+  };
+
   $scope.$on(resources.events.ELEMENT_EDITED, function(event, elementId) {
     if (_.contains(EDITABLE_ELEMENTS, elementId)) {
-      savePost();
+      highlight();
+      savePost(); //???
     }
   });
 

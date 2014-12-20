@@ -1,5 +1,5 @@
-angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope', 'logger',
-  function($dialog, $rootScope, logger) {
+angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope', 'logger', 'storage',
+  function($dialog, $rootScope, logger, storage) {
     var POST_TYPE = 'post';
     var TAG_TYPE = 'post_tag';
     var CATEGORY_TYPE = 'category';
@@ -26,14 +26,13 @@ angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope',
     };
 
     var loadCredentialsFromStorage = function(onCompletionCallback) {
+      storage.get(LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY, function(storedValues) {
 
-      chrome.storage.local.get(LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY, function(storedValues) {
-
-        if (storedValues[LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY]) {
-          _credentials.url = valueOrDefault(storedValues[LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY].url, '');
-          _credentials.password = valueOrDefault(storedValues[LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY].password, _credentials.currentSessionCachedPassword);
-          _credentials.username = valueOrDefault(storedValues[LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY].username, '');
-          _credentials.rememberPassword = valueOrDefault(storedValues[LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY].rememberPassword, false);
+        if (storedValues) {
+          _credentials.url = valueOrDefault(storedValues.url, '');
+          _credentials.password = valueOrDefault(storedValues.password, _credentials.currentSessionCachedPassword);
+          _credentials.username = valueOrDefault(storedValues.username, '');
+          _credentials.rememberPassword = valueOrDefault(storedValues.rememberPassword, false);
         } else {
           _credentials.url = '';
           _credentials.username = '';
@@ -113,7 +112,6 @@ angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope',
       },
 
       saveCredentials: function(userSuppliedCredentials) {
-        var saveMe = {};
 
         _.each(userSuppliedCredentials, function(value, key, list) {
           _credentials[key] = userSuppliedCredentials[key];
@@ -124,9 +122,8 @@ angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope',
           _credentials.currentSessionCachedPassword = userSuppliedCredentials.password;
           userSuppliedCredentials.password = '';
         }
-        saveMe[LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY] = userSuppliedCredentials;
 
-        chrome.storage.local.set(saveMe, function() {
+        storage.set(LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY, userSuppliedCredentials, function() {
           logger.log("saved login credentials for blog '" + _credentials.url + "'", "wordpress service");
         });
       },
@@ -139,11 +136,7 @@ angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope',
           rememberPassword: false
         };
 
-        var saveMe = {};
-
-        saveMe[LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY] = _credentials;
-
-        chrome.storage.local.set(saveMe, function() {
+        storage.set(LOCAL_STORAGE_WORDPRESS_CREDENTIALS_KEY, _credentials, function() {
           logger.log("reset credentials", "wordpress service");
         });
       },
@@ -208,7 +201,7 @@ angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope',
         };
 
         callWordPress('wp.uploadFile', [file], onSuccessCallback, onErrorCallback);
-      },
+      }
     };
   }
 ]);

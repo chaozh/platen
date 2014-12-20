@@ -7,7 +7,8 @@
     <h1 class="input-box" id="post-title" contenteditable="true" data-editable-text="true" data-ng-model="post.title"></h1>
     <div id="post-container">
       <article contenteditable="true" data-editable-markdown="true" id="post-content" data-ng-show="!previewOn"
-      data-ng-model="post.contentMarkdownHtml" data-pastable-image="true"></article>
+      data-ng-model="post.contentMarkdownHtml" data-pastable-image="true">
+      </article>
       <div id="post-content-preview" data-ng-show="previewOn" data-ng-bind-html-unsafe="post.contentHtmlPreview"></div>
     </div>
   </section>
@@ -77,7 +78,7 @@
           <ul>
             <li class="thumbnail" data-ng-repeat="image in post.images">
               <span class="caption" data-ng-bind="image.name"></span>
-              <img data-ng-src="{{image.localUrl}}"></img>
+              <img data-ng-src="{{image.localUrl}}"/>
               <span class="image-controls">
                 <span class="icon-insert" data-ng-click="copyToClipboard(image)" title="copy image to clipboard"></span>
                 <span class="icon-settings" data-ng-click="configureImage(image)" title="configure image"></span>
@@ -115,7 +116,7 @@
       <div class="modal-body">
         <div class="field-group full">
           <label>Enter image name</label>
-          <input id="inserted-image-name" type="text" class="input-box" data-ng-model="imageToInsert.fileName"></input>
+          <input id="inserted-image-name" type="text" class="input-box" data-ng-model="imageToInsert.fileName"/>
         </div>
       </div>
       <div class="modal-footer">
@@ -133,14 +134,14 @@
       </div>
       <div class="modal-body">
         <div class="image-thumb-container">
-          <img class="image" data-ng-src="{{imageToConfigure.localUrl}}"></img>
+          <img class="image" data-ng-src="{{imageToConfigure.localUrl}}"/>
           <span class="caption" data-ng-bind="imageToConfigure.fileName"></span>
         </div>
 
         <div class="image-info-container">
           <div class="field-group full">
             <label>width <em>(in px)</em></label>
-            <input type="text" class="input-box" data-ng-model="imageToConfigure.width"></input>
+            <input type="text" class="input-box" data-ng-model="imageToConfigure.width"/>
           </div>
           <div class="field-group full">
             <label>alignment</label>
