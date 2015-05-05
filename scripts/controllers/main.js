@@ -42,7 +42,7 @@ var MainController = function($rootScope, $scope, $dialog, $timeout, fileManager
     notify("error initializing file system", error, false);
   });
 
-  _.each(settings.fonts, function(font) {
+  angular.forEach(settings.fonts, function(font) {
     $scope.fonts.push(font);
   });
 
@@ -57,7 +57,7 @@ var MainController = function($rootScope, $scope, $dialog, $timeout, fileManager
           return font.toLowerCase();
       });
 
-      _.each(fonts, function(font) {
+      angular.forEach(fonts, function(font) {
         if (_.indexOf(lowerCasedFonts, font.fontId.toLowerCase()) === -1) {
           $scope.fonts.push(font.fontId);
         }
@@ -65,15 +65,8 @@ var MainController = function($rootScope, $scope, $dialog, $timeout, fileManager
     });
   }
 
-  settings.load(function(settings) {
-    $scope.settings = settings;
-    $scope.switchTheme($scope.settings.theme);
-    $scope.$broadcast(resources.events.FONT_CHANGED);
-    $scope.safeApply();
-  });
-
   $scope.switchTheme = function(themeName) {
-    _.each($('link'), function(link) {
+    angular.forEach($('link'), function(link) {
       link.disabled = (link.title !== themeName);
     });
 
@@ -272,6 +265,13 @@ var MainController = function($rootScope, $scope, $dialog, $timeout, fileManager
       this.$apply(fn);
     }
   };
+
+  settings.load(function(settings) {
+    $scope.settings = settings;
+    $scope.switchTheme($scope.settings.theme);
+    $scope.$broadcast(resources.events.FONT_CHANGED);
+    $scope.safeApply();
+  });
 };
 
 MainController.$inject = ['$rootScope', '$scope', '$dialog', '$timeout', 'fileManager', 'logger', 'resources', 'settings'];

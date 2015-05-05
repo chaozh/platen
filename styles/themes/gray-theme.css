@@ -193,6 +193,9 @@ body {
   width: 200px;
   margin-top: 40px;
 }
+.list-item-local {
+  border-color: #91c848 !important;
+}
 .list-item-line {
   border: 1px solid #cfcfcf;
   padding: 14px;
@@ -429,6 +432,7 @@ body {
   position: fixed;
   bottom: 0px;
   width: 100%;
+  z-index: 2;
 }
 #metadata-panel .collapsed {
   height: 22px;

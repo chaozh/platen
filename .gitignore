@@ -1,1 +1,9 @@
 platen.js
+.project
+.idea
+.settings
+node_modules
+Thumbs.db
+.DS_Store
+platen.iml
+vendor/bower-libs

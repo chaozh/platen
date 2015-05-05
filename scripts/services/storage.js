@@ -1,17 +1,27 @@
 angular.module('platen.services').factory('storage', function() {
-    var DEFAULT_SYSTEM = 'chrome';
-    var system = chrome.storage.local;
+
     return {
         get: function(key, callback) {
-            system.get(key, function(storedValues){
-                callback(storedValues[key]);
-            });
+            if(chrome.storage) {
+                chrome.storage.local.get(key, function (storedValues) {
+                    callback(storedValues[key]);
+                });
+            } else {
+                var tmp =  window.localStorage.getItem(key);
+                callback(JSON.parse(tmp));
+            }
         },
 
         set: function(key, value, callback, obj){
             var tmp = obj || {};
-            tmp[key] = value;
-            system.set(tmp, callback);
+            if(chrome.storage) {
+                tmp[key] = value;
+                chrome.storage.local.set(tmp, callback);
+            } else {
+                tmp = JSON.stringify(value);
+                window.localStorage.setItem(key, tmp);
+                callback();
+            }
         }
-    }
+    };
 });

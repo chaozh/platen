@@ -7,7 +7,12 @@
 	angular.module('platen.filters', []);
 
 	var platen = angular.module('platen', ['platen.models', 'platen.directives', 'platen.services', 'platen.filters', 'ui.bootstrap', 'ui'])
-		.config(['$routeProvider',
+		.config([ '$compileProvider',
+		function( $compileProvider ) {
+			$compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
+			// Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...) after uses aHrefSanitizationWhitelist(...)
+		}
+		]).config([ '$routeProvider',
 		function($routeProvider) {
 
 			$routeProvider.when('/posts', {
@@ -36,8 +41,3 @@
 		}
 	]);
 }());
-
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-41456393-1']);
-_gaq.push(['_setDomainName', 'platen']);
-_gaq.push(['_trackPageview']);

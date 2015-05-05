@@ -6,6 +6,11 @@ angular.module('platen.services').factory('logger', function() {
 
   return {
     log: function(message, location) {
+      var entry = {
+        message: message,
+        location: location,
+        date: new Date()
+      };
 
       if (log.length > MAX_QUEUE_SIZE) {
         console.log("removing log item");
@@ -16,13 +21,9 @@ angular.module('platen.services').factory('logger', function() {
         }
       }
 
-      log.push({
-        message: message,
-        location: location,
-        date: new Date()
-      });
+      log.push(entry);
 
-      console.log(message);
+      console.log(message + ', from ' + location + ' at ' + entry.date);
     },
 
     getLogs: function() {

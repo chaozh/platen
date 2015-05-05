@@ -1,6 +1,4 @@
 var EditorController = function(Post, $scope, $routeParams, $filter, fileManager, wordpress, logger, resources, settings) {
-  var STATUS_DRAFT = 'draft';
-  var STATUS_PUBLISH = 'publish';
   var DEFAULT_IMAGE_ALIGNMENT = 'center';
 
   var POST_TITLE_ID = 'post-title';
@@ -65,17 +63,6 @@ var EditorController = function(Post, $scope, $routeParams, $filter, fileManager
     $scope.showMetadata = false;
     $scope.previewMessage = MESSAGE_PREVIEW_HTML;
 
-    /*$scope.editor = new Pen({
-      editor: $('#post-content')[0] ,
-      debug: true
-    });*/
-
-    /*$scope.editor = CodeMirror.fromTextArea( $('#markdown-editor')[0], {
-      mode: 'markdown',
-      tabMode: 'indent',
-      lineWrapping: true
-    });*/
-
     logger.log("loaded post '" + $scope.post.title + "'", "EditorController");
 
     $scope.safeApply();
@@ -97,14 +84,9 @@ var EditorController = function(Post, $scope, $routeParams, $filter, fileManager
     });
   };
 
-  var highlight = function() {
-
-  };
-
   $scope.$on(resources.events.ELEMENT_EDITED, function(event, elementId) {
     if (_.contains(EDITABLE_ELEMENTS, elementId)) {
-      highlight();
-      savePost(); //???
+      savePost(); // record in local file
     }
   });
 
@@ -206,9 +188,7 @@ var EditorController = function(Post, $scope, $routeParams, $filter, fileManager
   $scope.toggleMetadataPanel = function() {
     $scope.showMetadata = !$scope.showMetadata;
 
-    if ($scope.showMetadata && $scope.post.excerpt === '') {
-      $scope.updateExcerpt();
-    }
+    //we should fetch new tags or cate here!
     if ($scope.showMetadata) {
       $('#post-excerpt').focus();
     }
@@ -238,7 +218,7 @@ var EditorController = function(Post, $scope, $routeParams, $filter, fileManager
 
     wordpress.getCredentials(function() {
       wordpress.getTags(function(tags) {
-        _.each(tags[0], function(tag) {
+        angular.forEach(tags[0], function(tag) {
           $scope.tags.push(tag);
         });
         notifyOnCompletion("got tags from WordPress", null, true);
@@ -266,7 +246,7 @@ var EditorController = function(Post, $scope, $routeParams, $filter, fileManager
 
     wordpress.getCredentials(function() {
       wordpress.getCategories(function(categories) {
-        _.each(categories[0], function(category) {
+        angular.forEach(categories[0], function(category) {
           $scope.categories.push(category);
         });
         notifyOnCompletion("got categories from WordPress", null, true);
@@ -347,14 +327,12 @@ var EditorController = function(Post, $scope, $routeParams, $filter, fileManager
       notifyOnCompletion("error deleting image", error, false);
     });
   };
-
+  //TODO:sync rather than publish
   $scope.togglePublishStatus = function() {
-    if ($scope.post.status === STATUS_DRAFT) {
-      $scope.post.status = STATUS_PUBLISH;
-      $scope.post.state.toBePublished = true;
+    if ($scope.post.status === resources.post_status.STATUS_DRAFT) {
+      $scope.post.status = resources.post_status.STATUS_PUBLISH;
     } else {
-      $scope.post.status = STATUS_DRAFT;
-      $scope.post.state.toBePublished = false;
+      $scope.post.status = resources.post_status.STATUS_DRAFT;
     }
 
     savePost();
