@@ -65,3 +65,4 @@ var ImagesController = function($scope, fileManager, logger, resources) {
 };
 
 ImagesController.$inject = ['$scope', 'fileManager', 'logger', 'resources'];
+angular.module('platen.controllers').controller('ImagesController', ImagesController);

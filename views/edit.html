@@ -93,7 +93,7 @@
 
 
   <div id="delete-image-confirm">
-    <div modal="deleteImageConfirmOpen" close="cancelImageDelete()">
+    <div modal-window data-ng-show="deleteImageConfirmOpen" close="cancelImageDelete()">
       <div class="modal-header">
         <h2>Delete Image</h2>
       </div>
@@ -109,7 +109,7 @@
 
 
   <div id="insert-image-dialog">
-    <div modal="insertImageDialogOpen" close="cancelImageInsert()">
+    <div modal-window data-ng-show="insertImageDialogOpen" close="cancelImageInsert()">
       <div class="modal-header">
         <h2>Insert Image</h2>
       </div>
@@ -128,7 +128,7 @@
 
 
   <div id="configure-image-dialog">
-    <div modal="configureImageDialogOpen" close="closeConfigureImage()">
+    <div modal-window data-ng-show="configureImageDialogOpen" close="closeConfigureImage()">
       <div class="modal-header">
         <h2>Configure Image '<span data-ng-bind="imageToConfigure.name"></span>'</h2>
       </div>

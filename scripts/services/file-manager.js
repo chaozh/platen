@@ -25,7 +25,7 @@ angular.module('platen.services').factory('fileManager', function() {
   FileError.prototype.__defineGetter__('name', function() {
     var keys = Object.keys(FileError);
 
-    _.each(keys, function(key) {
+    angular.forEach(keys, function(key) {
       if (FileError[key] === this.code) {
         return key;
       }
@@ -73,7 +73,7 @@ angular.module('platen.services').factory('fileManager', function() {
       var accessFiles = function() {
         fs.root.getDirectory(directoryPath, doCreate, function(dirEntry) {
           dirEntry.createReader().readEntries(function(entries) {
-            _.each(entries, readEntry);
+            angular.forEach(entries, readEntry);
           }, function(e) {
             onErrorCallback(getError(e, "while reading entries in " + directoryPath));
           });
@@ -185,6 +185,6 @@ angular.module('platen.services').factory('fileManager', function() {
       fs.root.getDirectory(directoryPath, doCreate, onSuccessCallback, function(e) {
         onErrorCallback(getError(e, " while creating directory " + directoryPath));
       });
-    },
+    }
   };
 });

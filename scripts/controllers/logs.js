@@ -3,3 +3,4 @@ var LogsController = function($scope, logger) {
 };
 
 LogsController.$inject = ['$scope', 'logger'];
+angular.module('platen.controllers').controller('LogsController', LogsController);

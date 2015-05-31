@@ -1,5 +1,5 @@
-angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope', 'logger', 'storage',
-  function($dialog, $rootScope, logger, storage) {
+angular.module('platen.services').factory('wordpress', ['$modal', '$rootScope', 'logger', 'storage',
+  function($modal, $rootScope, logger, storage) {
     var POST_TYPE = 'post';
     var TAG_TYPE = 'post_tag';
     var CATEGORY_TYPE = 'category';
@@ -48,12 +48,12 @@ angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope',
     var obtainCredentialsFromUserIfNeeded = function(onSuccessCallback, onErrorCallback) {
       var createLoginDialog = function() {
         if (!areCredentialsValid()) {
-          var d = $dialog.dialog({
+          var d = $modal.open({
             controller: 'LoginController',
             templateUrl: 'views/modals/login.html'
           });
 
-          d.open().then(function() {
+          d.result.then(function() {
             if (areCredentialsValid()) {
               onSuccessCallback();
             } else {
@@ -113,7 +113,7 @@ angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope',
 
       saveCredentials: function(userSuppliedCredentials) {
 
-        _.each(userSuppliedCredentials, function(value, key, list) {
+        angular.forEach(userSuppliedCredentials, function(value, key, list) {
           _credentials[key] = userSuppliedCredentials[key];
         });
 
@@ -142,7 +142,20 @@ angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope',
       },
 
       getPost: function(postId, onSuccessCallback, onErrorCallback) {
-        callWordPress('wp.getPost', [post_id], onSuccessCallback, onErrorCallback);
+        callWordPress('wp.getPost', [postId], onSuccessCallback, onErrorCallback);
+      },
+      /*
+       struct filter: Optional.
+           string post_type
+           string post_status
+           int number
+           int offset
+           string orderby
+           string order
+       http://codex.wordpress.org/XML-RPC_WordPress_API/Posts
+       */
+      getPosts: function(postFilters, postFields, onSuccessCallback, onErrorCallback) {
+        callWordPress('wp.getPosts', [postFilters, postFields],onSuccessCallback, onErrorCallback);
       },
 
       savePost: function(post, onSuccessCallback, onErrorCallback) {
@@ -155,7 +168,14 @@ angular.module('platen.services').factory('wordpress', ['$dialog', '$rootScope',
           post_excerpt: post.excerpt,
           post_content: post.content,
           post_format: '',
-          terms_names: ''
+          terms_names: '',
+          //deal with custom_files
+          custom_fields: [
+            {
+              key: 'markdown',
+              value: post.contentMarkdown
+            }
+          ]
         };
 
         if (post.tags && post.tags.trim() !== '') {

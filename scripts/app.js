@@ -1,13 +1,20 @@
 (function() {
 	'use strict';
 
+	angular.module('platen.controllers', []);
 	angular.module('platen.directives', []);
 	angular.module('platen.services', []);
 	angular.module('platen.models', []);
 	angular.module('platen.filters', []);
 
-	var platen = angular.module('platen', ['platen.models', 'platen.directives', 'platen.services', 'platen.filters', 'ui.bootstrap', 'ui'])
-		.config(['$routeProvider',
+	var platen = angular.module('platen', ['ngRoute','platen.controllers', 'platen.models', 'platen.directives', 'platen.services', 'platen.filters', 'ui.bootstrap', 'ui'])
+		/*.config([ '$compileProvider',
+		function( $compileProvider ) {
+			$compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
+			// Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...) after uses aHrefSanitizationWhitelist(...)
+		}
+		])*/
+		.config([ '$routeProvider',
 		function($routeProvider) {
 
 			$routeProvider.when('/posts', {
@@ -36,8 +43,3 @@
 		}
 	]);
 }());
-
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-41456393-1']);
-_gaq.push(['_setDomainName', 'platen']);
-_gaq.push(['_trackPageview']);

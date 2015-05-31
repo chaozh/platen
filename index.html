@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-ng-csp="">
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" type="text/css" title="white" href="styles/themes/white-theme.css" />
@@ -7,14 +7,12 @@
 		<link rel="stylesheet" type="text/css" title="gray" disabled="true" href="styles/themes/gray-theme.css" />
 		<script src="platen.js"></script>
 
-		<!-- for pen debug
-		<link rel="stylesheet" type="text/css" title="pen" href="vendor/pen/src/pen.css" />
-		<script src="vendor/pen/src/pen.js"></script>
-		<script src="vendor/pen/src/markdown.js"></script>
-		-->
+		<script type="text/javascript" src="vendor/codemirror.js"></script>
+		<script type="text/javascript" src="vendor/markdown.js"></script>
+		<script type="text/javascript" src="vendor/reMarked/reMarked.js"></script>
 		<title>platen</title>
 	</head>
-	<body data-ng-app="platen" data-ng-csp>
+	<body data-ng-app="platen">
 		<div data-ng-controller="MainController" class="main-container">
 			<aside id="settings-panel" data-ng-class="{'options-visible': optionsPanelVisible}" data-ng-show="optionsPanelVisible">
 
@@ -115,7 +113,7 @@
 		</section>
 
 		<div id="delete-posts-confirm">
-			<div modal="deleteAllPostsConfirmOpen" close="close()">
+			<div modal-window data-ng-show="deleteAllPostsConfirmOpen" close="close()">
 				<div class="modal-header">
 					<h2>Delete All Posts</h2>
 				</div>
@@ -130,7 +128,7 @@
 		</div>
 
 		<div id="delete-images-confirm">
-			<div modal="deleteAllImagesConfirmOpen" close="close()">
+			<div modal-window data-ng-show="deleteAllImagesConfirmOpen" close="close()">
 				<div class="modal-header">
 					<h2>Delete All Posts</h2>
 				</div>

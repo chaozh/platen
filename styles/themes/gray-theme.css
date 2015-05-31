@@ -1,3 +1,4 @@
+@import "../../vendor/bower-libs/angular/angular-csp.css";
 body {
   background-image: -webkit-radial-gradient(center 35em, circle closest-corner, #ffffff 5%, #e8e8e8 65%);
 }
@@ -192,6 +193,9 @@ body {
   float: left;
   width: 200px;
   margin-top: 40px;
+}
+.list-item-local {
+  border-color: #91c848 !important;
 }
 .list-item-line {
   border: 1px solid #cfcfcf;
@@ -429,6 +433,7 @@ body {
   position: fixed;
   bottom: 0px;
   width: 100%;
+  z-index: 2;
 }
 #metadata-panel .collapsed {
   height: 22px;

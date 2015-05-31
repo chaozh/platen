@@ -1,15 +1,17 @@
 <div class="page-container" data-ng-controller="PostsController">
     <h1>Posts</h1>
 
+    <div class="fetch-btn" ng-click="fetchPost()">fetch</div>
+
     <div class="filter-options">
         <h4>sort by</h4>
-        <span class="filter-option" ng-click="predicate = 'state.createDate'; reverse=!reverse">created on</span>
-        <span class="filter-option" ng-click="predicate = 'state.lastSaveDate'; reverse=!reverse">saved on</span>
-        <span class="filter-option" ng-click="predicate = 'title'; reverse=!reverse">title</span>
+        <span class="filter-option" data-ng-click="predicate = 'state.createDate'; reverse=!reverse">created on</span>
+        <span class="filter-option" data-ng-click="predicate = 'state.lastSaveDate'; reverse=!reverse">saved on</span>
+        <span class="filter-option" data-ng-click="predicate = 'title'; reverse=!reverse">title</span>
     </div>
-
     <ul class="list">
-        <li class="list-item-line" data-ng-repeat="post in postsList | orderBy:predicate:reverse">
+        <!--http://stackoverflow.com/questions/18826320/what-is-the-hashkey-added-to-my-json-stringify-result || track by post.id duplicated keys error!-->
+        <li ng-class="{'list-item-local': post.state.lastSaveDate}" class="list-item-line" data-ng-repeat="post in filteredPostsList | orderBy:predicate:reverse">
             <span class="icon icon-delete" data-ng-click="deletePost(post)"></span>
             <span class="icon icon-edit" data-ng-click="editPost(post)"></span>
             <h3 data-ng-bind="post.title"  data-ng-click="editPost(post)" class="clickable-title"></h3>
@@ -26,11 +28,12 @@
                 <strong data-ng-bind="post.status"></strong>
             </span>
         </li>
-        <li id="no-posts-found" class="list-item-line" ng-hide="postsList.length">no posts yet. <a href="#/posts/0">start writing one?</a></li>
+        <li id="no-posts-found" class="list-item-line" data-ng-hide="postsList.length">no posts yet. <a href="#/posts/0">start writing one?</a></li>
     </ul>
+    <pagination total-items="postsList.length" items-per-page="itemsPerPage" data-ng-model="currentPage" max-size="maxSize" class="pagination-sm" data-ng-change="pageChanged()"></pagination>
 
     <div id="delete-post-confirm">
-        <div modal="deletePostConfirmOpen" close="close()">
+        <div modal-window ng-show="deletePostConfirmOpen" close="close()">
             <div class="modal-header">
                 <h2>Delete Post</h2>
             </div>
@@ -38,8 +41,8 @@
                 <p>Are you sure you want to delete post '<span data-ng-bind="postToDelete.title"></span>' and all its images?</p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-warning cancel" ng-click="proceedWithDelete()">Proceed</button>
-                <button class="btn btn-warning cancel" ng-click="cancelDelete()">Cancel</button>
+                <button class="btn btn-warning cancel" data-ng-click="proceedWithDelete()">Proceed</button>
+                <button class="btn btn-warning cancel" data-ng-click="cancelDelete()">Cancel</button>
             </div>
         </div>
     </div>

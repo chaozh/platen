@@ -70,7 +70,7 @@ angular.module('platen.services').factory('settings', ['storage',
 
           var settings = rawValue || {};
           // for any settings not already configured, set them to the default value
-          _.each(DEFAULTS, function(value, key, list) {
+          angular.forEach(DEFAULTS, function(value, key, list) {
             if (!settings[key]) {
               settings[key] = value;
             }

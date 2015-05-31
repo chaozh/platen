@@ -1,4 +1,4 @@
-var LoginController = function($scope, dialog, wordpress) {
+var LoginController = function($scope, $modalInstance, wordpress) {
   wordpress.loadCredentials(function(login) {
     $scope.login = {
       url: login.url,
@@ -15,17 +15,18 @@ var LoginController = function($scope, dialog, wordpress) {
       $scope.login.url = 'http://' + $scope.login.url;
     }
     wordpress.saveCredentials($scope.login);
-    dialog.close();
+    $modalInstance.close();
   };
 
   $scope.resetCredentials = function() {
     wordpress.resetCredentials();
-    dialog.close();
+    $modalInstance.close();
   };
 
   $scope.cancel = function() {
-    dialog.close();
+    $modalInstance.close();
   };
 };
 
-LoginController.$inject = ['$scope', 'dialog', 'wordpress'];
+LoginController.$inject = ['$scope', '$modalInstance', 'wordpress'];
+angular.module('platen.controllers').controller('LoginController',LoginController);

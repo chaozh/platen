@@ -1,3 +1,4 @@
+@import "../../vendor/bower-libs/angular/angular-csp.css";
 @font-face {
   font-family: 'economica';
   src: url('/fonts/Economica-Bold.ttf');
@@ -189,6 +190,9 @@
   float: left;
   width: 200px;
   margin-top: 40px;
+}
+.list-item-local {
+  border-color: #91c848 !important;
 }
 .list-item-line {
   border: 1px solid #404040;
@@ -426,6 +430,7 @@
   position: fixed;
   bottom: 0px;
   width: 100%;
+  z-index: 2;
 }
 #metadata-panel .collapsed {
   height: 22px;
