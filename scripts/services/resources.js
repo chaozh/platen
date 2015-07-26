@@ -11,7 +11,8 @@ angular.module('platen.services').value('resources',
       FONT_CHANGED: 'fontChanged',
       IMAGE_INSERTED: 'imageInserted',
       ALL_POSTS_DELETED: 'allPostsDeleted',
-      ALL_IMAGES_DELETED: 'allImagesDeleted'
+      ALL_IMAGES_DELETED: 'allImagesDeleted',
+      POSTS_LOADED: 'postsLoaded'
     },
 
     typography: {

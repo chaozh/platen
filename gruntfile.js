@@ -3,7 +3,8 @@ module.exports = function(grunt) {
 //'vendor/angular.min.1.1.5.js',
 //'vendor/ui-bootstrap-0.3.0.min.js',
 // 'vendor/angular-ui.min.js',
-  var all_scripts = ['vendor/jquery-1.9.1.min.js',
+// 'vendor/embedded_ga_host.js',
+    var all_scripts = ['vendor/jquery-1.9.1.min.js',
       'vendor/jquery.xmlrpc.min.js',
       'vendor/bower-libs/angular/angular.min.js',
       'vendor/bower-libs/angular-route/angular-route.min.js',
@@ -13,7 +14,6 @@ module.exports = function(grunt) {
       'vendor/marked.js',
       'vendor/moment.min.js',
       'vendor/underscore.1.4.4.min.js',
-      'vendor/embedded_ga_host.js',
       'scripts/app.js',
       'scripts/*/*.js'
   ];

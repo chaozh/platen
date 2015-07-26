@@ -24,40 +24,56 @@ angular.module('platen.models').factory('postIndex', ['$rootScope', 'resources',
         };
 
         return {
-            init: function(onCompletionCallback){
+            init: function(onProcessingCallback, onCompletionCallback){
                 if(_.isEmpty(postsMap)){
+                    logger.log("init from local", "PostIndex");
+
                     storage.get(resources.BLOG_DIRECTORY_PATH, function(posts) {
                         angular.forEach(posts, function(post) {
                             postsMap[post.id] = post;
-                            if(onCompletionCallback)
-                                onCompletionCallback(post);
+                            if(onProcessingCallback) {
+                                onProcessingCallback(post);
+                            }
                         });
+
+                        if(onCompletionCallback) {
+                            onCompletionCallback();
+                        }
                     });
                 } else {
+                    logger.log("init from postMap", "PostIndex");
+
                     angular.forEach(postsMap, function(post) {
-                        if(onCompletionCallback)
-                            onCompletionCallback(post);
+                        if(onProcessingCallback)
+                            onProcessingCallback(post);
                     });
+
+                    if(onCompletionCallback)
+                        onCompletionCallback();
                 }
             },
 
             updateByFile: function(file, isCovered, onCompletionCallback){
                 if(isCovered || angular.isUndefined(postsMap[file.id])) {
+                    logger.log("update postMap by file:" + file.id, "PostIndex");
                     postsMap[file.id] = file; //blog sign
                     if(onCompletionCallback)
                         onCompletionCallback(file);
                 }
             },
 
-            updateByRemote: function(newPosts, onCompletionCallback) {
+            updateByRemote: function(newPosts, onProcessingCallback, onCompletionCallback) {
                 angular.forEach(newPosts, function (post) {
                     if(angular.isUndefined(postsMap[post.post_id])) {
                         var desc = createLoacalIndex(post);
                         postsMap[desc.id] = desc;
-                        if(onCompletionCallback)
-                            onCompletionCallback(desc);
+                        if(onProcessingCallback)
+                            onProcessingCallback(desc);
                     }
                 });
+
+                if(onProcessingCallback)
+                    onCompletionCallback();
             },
 
             deleteByID: function(id, onCompletionCallback) {

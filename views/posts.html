@@ -10,8 +10,9 @@
         <span class="filter-option" data-ng-click="predicate = 'title'; reverse=!reverse">title</span>
     </div>
     <ul class="list">
-        <!--http://stackoverflow.com/questions/18826320/what-is-the-hashkey-added-to-my-json-stringify-result || track by post.id duplicated keys error!-->
-        <li ng-class="{'list-item-local': post.state.lastSaveDate}" class="list-item-line" data-ng-repeat="post in filteredPostsList | orderBy:predicate:reverse">
+        <!--http://stackoverflow.com/questions/18826320/what-is-the-hashkey-added-to-my-json-stringify-result 
+        http://www.befundoo.com/blog/optimizing-ng-repeat-in-angularjs || track by post.id duplicated keys error!-->
+        <li ng-class="{'list-item-local': post.state.lastSaveDate}" class="list-item-line" data-ng-repeat="post in filteredPostsList | orderBy:predicate:reverse track by post.id">
             <span class="icon icon-delete" data-ng-click="deletePost(post)"></span>
             <span class="icon icon-edit" data-ng-click="editPost(post)"></span>
             <h3 data-ng-bind="post.title"  data-ng-click="editPost(post)" class="clickable-title"></h3>
@@ -33,9 +34,9 @@
     <pagination total-items="postsList.length" items-per-page="itemsPerPage" data-ng-model="currentPage" max-size="maxSize" class="pagination-sm" data-ng-change="pageChanged()"></pagination>
 
     <div id="delete-post-confirm">
-        <div modal-window ng-show="deletePostConfirmOpen" close="close()">
+        <div modal-window animate="modalAnimation" ng-show="deletePostConfirmOpen" close="close()">
             <div class="modal-header">
-                <h2>Delete Post</h2>
+                <h2>Delete Post?</h2>
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to delete post '<span data-ng-bind="postToDelete.title"></span>' and all its images?</p>

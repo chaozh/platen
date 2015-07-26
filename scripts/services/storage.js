@@ -4,7 +4,7 @@ angular.module('platen.services').factory('storage', function() {
         get: function(key, callback) {
             if(!angular.isUndefined(chrome) && chrome.storage) {
                 chrome.storage.local.get(key, function (storedValues) {
-                    callback(storedValues[key]);
+                        callback(storedValues[key]);
                 });
             } else {
                 var tmp =  window.localStorage.getItem(key);

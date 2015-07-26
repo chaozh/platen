@@ -75,7 +75,7 @@ var EditorController = function(Post, $scope, $routeParams, $filter, fileManager
 
   var savePost = function() {
     Post.save(function() {
-      $scope.$apply();
+      $scope.safeApply();
       logger.log("saved post '" + $scope.post.title + "' on " + $scope.post.state.lastSaveDate, "EditorController");
     },
 

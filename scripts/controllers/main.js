@@ -6,6 +6,8 @@ var MainController = function($rootScope, $scope, $modal, $timeout, fileManager,
   $scope.settings = {};
   $scope.themes = settings.themes;
   $scope.systemFontsAvailable = false;
+  //for all modal window
+  $scope.modalAnimation = false;
 
   $scope.appStatus = {
     isProcessing: false,
@@ -254,7 +256,7 @@ var MainController = function($rootScope, $scope, $modal, $timeout, fileManager,
     });
     $scope.deleteAllImagesConfirmOpen = false;
   };
-
+  //a hack helper function 
   $rootScope.safeApply = $scope.safeApply = function(fn) {
     var phase = this.$root.$$phase;
     if (phase == '$apply' || phase == '$digest') {

@@ -113,7 +113,7 @@
 		</section>
 
 		<div id="delete-posts-confirm">
-			<div modal-window data-ng-show="deleteAllPostsConfirmOpen" close="close()">
+			<div modal-window animate="modalAnimation" data-ng-show="deleteAllPostsConfirmOpen" close="close()">
 				<div class="modal-header">
 					<h2>Delete All Posts</h2>
 				</div>
@@ -128,7 +128,7 @@
 		</div>
 
 		<div id="delete-images-confirm">
-			<div modal-window data-ng-show="deleteAllImagesConfirmOpen" close="close()">
+			<div modal-window animate="modalAnimation" data-ng-show="deleteAllImagesConfirmOpen" close="close()">
 				<div class="modal-header">
 					<h2>Delete All Posts</h2>
 				</div>
@@ -143,6 +143,6 @@
 		</div>
 
 	</div>
-	<iframe id="embedded_ga" seamless="seamless" src="analytics/embedded_ga_host.html"></iframe>
+	<!-- <iframe id="embedded_ga" seamless="seamless" src="analytics/embedded_ga_host.html"></iframe> -->
 </body>
 </html>

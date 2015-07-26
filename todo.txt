@@ -14,3 +14,10 @@ Pasting
 
 Image
 - when deleting from Images screen, remove from all posts where used (could be time consuming)
+
+Pagination
+- null id, duplited id
+- http://errors.angularjs.org/1.3.15/$compile/nonassign?p0=undefined&p1=modalWindow
+- fetch loading status
+New Post
+- http://errors.angularjs.org/1.3.15/$rootScope/inprog?p0=%24digest

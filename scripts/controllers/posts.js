@@ -6,7 +6,7 @@ var PostsController = function($scope, $location, storage, fileManager, wordpres
   $scope.postToDelete = {};
 
   $scope.currentPage = 1;
-  $scope.maxSize = 2;
+  $scope.maxSize = 3;
   $scope.itemsPerPage = 10;
 
   var postsOffset = 0,
@@ -29,33 +29,36 @@ var PostsController = function($scope, $location, storage, fileManager, wordpres
       $scope.postsList.push(post);
       $scope.loaded = true;
       //$scope.safeApply();
-    });
-    paginatedPosts();
+    }, function(){
+      logger.log("read local files", "PostsController");
 
-    fileManager.accessFilesInDirectory(resources.POST_DIRECTORY_PATH, fileManager.directoryAccessActions.READ, function(file) {
-      try {
-        var post = JSON.parse(file);
-        postIndex.updateByFile(post, false, function(post){
-          $scope.postsList.push(post);
-          $scope.loaded = true;
-          //$scope.safeApply();
-        });
-        paginatedPosts();
-      } catch (error) {
-        logger.log("error reading file [" + file + "]: " + error, "PostsController");
+      fileManager.accessFilesInDirectory(resources.POST_DIRECTORY_PATH, fileManager.directoryAccessActions.READ, function(file) {
+        try {
+          var post = JSON.parse(file);
+          postIndex.updateByFile(post, false, function(post){
+            $scope.postsList.push(post);
+            $scope.loaded = true;
+            //$scope.safeApply();
+            paginatedPosts();
+          });
+        } catch (error) {
+          logger.log("error reading file [" + file + "]: " + error, "PostsController");
+          $scope.$emit(resources.events.PROCESSING_FINISHED, {
+            message: "loading posts failed",
+            success: false
+          });
+          $scope.$apply();
+        }
+      }, function(error) {
+        logger.log(error, "PostsController");
+
         $scope.$emit(resources.events.PROCESSING_FINISHED, {
           message: "loading posts failed",
           success: false
         });
-        $scope.$apply();
-      }
-    }, function(error) {
-      logger.log(error, "PostsController");
-
-      $scope.$emit(resources.events.PROCESSING_FINISHED, {
-        message: "loading posts failed",
-        success: false
       });
+
+      paginatedPosts();
     });
   };
 
@@ -73,7 +76,7 @@ var PostsController = function($scope, $location, storage, fileManager, wordpres
               $scope.postsList.push(post);
               $scope.loaded = true;
               //$scope.safeApply();
-            });
+            }, paginatedPosts);
 
             postIndex.save(function(){
               logger.log("fetch posts from blog ", "PostsController");
@@ -95,13 +98,20 @@ var PostsController = function($scope, $location, storage, fileManager, wordpres
     var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
         end = begin + $scope.itemsPerPage;
 
-    $scope.filteredPostsList = $scope.postsList.slice(begin, end);
+    if($scope.postsList.length > end) {
+      $scope.filteredPostsList = $scope.postsList.slice(begin, end);
+    } else {
+      $scope.filteredPostsList = $scope.postsList;
+    }
+
     $scope.safeApply();
+    logger.log("repaginate posts", "PostsController");
   };
 
   if (!$scope.loaded) {
     loadLocalPosts();
   }
+ //handle event
   //delete all posts in local!
   $scope.$on(resources.events.ALL_POSTS_DELETED, function(event, args) {
     loadLocalPosts();
@@ -109,7 +119,6 @@ var PostsController = function($scope, $location, storage, fileManager, wordpres
 
   $scope.fetchPost = function() {
     loadPosts();
-    paginatedPosts();
   };
 
   $scope.pageChanged = function() {
@@ -118,8 +127,9 @@ var PostsController = function($scope, $location, storage, fileManager, wordpres
     if(begin + $scope.itemsPerPage >= postsOffset + fetchNum){
       postsOffset += fetchNum;
       loadPosts();
+    }else{
+      paginatedPosts();
     }
-    paginatedPosts();
   };
 
   $scope.deletePost = function(post) {
@@ -150,7 +160,7 @@ var PostsController = function($scope, $location, storage, fileManager, wordpres
         return (post.id === $scope.postToDelete.id);
       });
 
-      postIndex.deleteByID($scope.postToDelete.id);
+      postIndex.deleteByID($scope.postToDelete.id, paginatedPosts);
       postIndex.save(function(){
         logger.log("delete post from blog index", "PostsController");
       });
